@@ -1,0 +1,31 @@
+# Build output
+bin/
+obj/
+
+# Object files
+*.o
+*.a
+*.so
+*.d
+
+# ISO / disk images
+*.iso
+*.img
+*.hdd
+*.raw
+
+# Debug / tooling leftovers
+*.log
+*.map
+
+# Editor / OS junk
+.DS_Store
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+iso_root/
+# QEMU leftovers (if you add them later)
+qemu.log
