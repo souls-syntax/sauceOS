@@ -2,6 +2,7 @@
 bin/
 obj/
 
+limine/
 # Object files
 *.o
 *.a
