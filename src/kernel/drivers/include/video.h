@@ -13,10 +13,6 @@ extern "C" {
 
 void PutPixel(struct limine_framebuffer *fb, int x, int y, uint32_t color);
 
-int printf(const char* __restrict, ...);
-int putchar(int);
-int puts(const char*);
-
 #ifdef __cplusplus
 }
 #endif

@@ -76,6 +76,9 @@ override CFLAGS += \
 # Internal C preprocessor flags that should not be changed by the user.
 override CPPFLAGS := \
     -I src \
+		-I src/include \
+		-I src/libc/include \
+		-D__is_libk \
     $(CPPFLAGS) \
     -MMD \
     -MP
