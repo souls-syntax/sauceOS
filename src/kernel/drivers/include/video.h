@@ -1,3 +1,4 @@
+//video.h
 #ifndef _VIDEO_H
 #define _VIDEO_H 1
 
@@ -11,11 +12,13 @@
 extern "C" {
 #endif
 
-void PutPixel(struct limine_framebuffer *fb, int x, int y, uint32_t color);
+void PutPixel(int x, int y);
 
-void kputc(struct limine_framebuffer *fb, char c, uint32_t color);
+extern struct limine_framebuffer *g_framebuffer;
 
-void kprint(struct limine_framebuffer *fb, const char *str, uint32_t color);
+void video_init(void);
+
+void framebuffer_scroll(void);
 
 #ifdef __cplusplus
 }
