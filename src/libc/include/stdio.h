@@ -10,9 +10,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-void PutPixel(struct limine_framebuffer *fb, int x, int y, uint32_t color);
-
+//
+// void PutPixel(struct limine_framebuffer *fb, int x, int y, uint32_t color);
+//
 int printf(const char* __restrict, ...);
 int putchar(int);
 int puts(const char*);

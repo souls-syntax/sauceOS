@@ -4,6 +4,7 @@
 #include <limine.h>
 #include <string.h>
 #include <stdio.h>
+#include <video.h>
 
 __attribute__((used, section(".limine_requests")))
 static volatile uint64_t limine_base_revision[] = LIMINE_BASE_REVISION(4);
@@ -50,11 +51,7 @@ void kmain(void) {
   // Fetching the first framebuffer
   struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
 
-  for (int y = 0; y < 100; y++) {
-    for (int x = 0; x < 100; x++) {
-      PutPixel(framebuffer, x, y, 0x00FF00);
-    }
-  }
+  kprint(framebuffer, "Hello World! So happy to see everyone from here.", 0x00FF00);
   //
   // // Assuming framebuffer is RGB with 32-bit pixels
   // for(size_t i = 0; i < 100; i++) {
