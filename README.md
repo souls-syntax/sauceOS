@@ -6,3 +6,8 @@ A hobby x86_64 operating system using the Limine bootloader.
 ```bash
 make TOOLCHAIN_PREFIX=x86_64-elf-
 ```
+# CREDITS
+
+Font originally from https://github.com/hubenchang0515/font8x16.
+
+It was the reason my kernel could speak.
