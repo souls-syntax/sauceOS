@@ -1,6 +1,8 @@
 ;gdt.s
 global gdt_flush
 
+global tss_flush
+
 ; In long mode we can't do far jump. Remember before trying to make it "efficient".
 gdt_flush:
   ;Reload CS registers
@@ -18,3 +20,9 @@ gdt_flush:
   MOV GS, AX
   MOV SS, AX
   RET
+
+
+tss_flush:
+  mov ax, 0x28      ; Index 5 * 8 = 40 (0x28)
+  ltr ax            ; Load Task Register (Hardware checks GDT entry 5)
+  ret

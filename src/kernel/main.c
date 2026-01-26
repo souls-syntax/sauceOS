@@ -18,7 +18,7 @@ void kmain(void) {
   video_init();
   initGdt();
 
-  kprintf("GDT is online");
+  kprintf("TSS is online");
   hcf();
 }
 
