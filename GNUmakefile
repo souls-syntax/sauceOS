@@ -79,6 +79,7 @@ override CPPFLAGS := \
 		-I src/include \
 		-I src/libc/include \
 		-I src/kernel/drivers/include \
+		-I src/arch/x86_64/include \
 		-D__is_libk \
     $(CPPFLAGS) \
     -MMD \

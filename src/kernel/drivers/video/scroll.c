@@ -14,12 +14,4 @@ void framebuffer_scroll(void) {
 
   memmove(fb, fb + scroll_bytes, total_bytes - scroll_bytes);
   memset(fb + total_bytes - scroll_bytes, 0, scroll_bytes);
-  //
-  // for(uint64_t i = scroll_bytes; i < total_bytes; i++) {
-  //   fb[i - scroll_bytes] = fb[i];
-  // }
-  //
-  // for(uint64_t i = total_bytes - scroll_bytes; i < total_bytes; i++) {
-  //   fb[i] = 0x00;
-  // }
 }
