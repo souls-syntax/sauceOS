@@ -46,7 +46,7 @@ struct tss_entry_struct {
 
 void initGdt();
 void setGdtGate(uint32_t num, uint64_t base, uint64_t limit, uint8_t access, uint8_t gran);
-void writeTSS(uint32_t num, uint16_t ss0, uint32_t esp0);
+void writeTSS(uint32_t num, uint16_t ss0, uint64_t rsp0);
 #ifdef __cplusplus
 }
 #endif

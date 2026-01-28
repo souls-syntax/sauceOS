@@ -8,6 +8,7 @@ extern void tss_flush();
 struct gdt_entry_struct gdt_entries[7];
 struct gdt_ptr_struct gdt_ptr;
 struct tss_entry_struct tss_entry;
+
 void initGdt() {
   gdt_ptr.limit = (sizeof(struct gdt_entry_struct)*7) -1; // we are subtracting due to some memory offset. Will have to look later
   gdt_ptr.base = (uint64_t)&gdt_entries;
@@ -25,7 +26,7 @@ void initGdt() {
 
 }
 
-void writeTSS(uint32_t num, uint16_t ss0, uint32_t esp0) {
+void writeTSS(uint32_t num, uint16_t ss0, uint64_t rsp0) {
   
   uint64_t base = (uint64_t)&tss_entry;
   uint64_t limit = sizeof(tss_entry);
@@ -43,7 +44,7 @@ void writeTSS(uint32_t num, uint16_t ss0, uint32_t esp0) {
   
   // Init the struct
   memset(&tss_entry,0,sizeof(tss_entry));
-  tss_entry.rsp0 = esp0;
+  tss_entry.rsp0 = rsp0;
   tss_entry.iopb = sizeof(tss_entry);
 
 }

@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <video.h>
 #include <gdt.h>
+#include <idt.h>
 
 static void hcf(void) {
   for(;;) {
@@ -17,8 +18,11 @@ void kmain(void) {
 
   video_init();
   initGdt();
+  initIdt();
 
-  kprintf("TSS is online");
+  __asm__ volatile ("int $0x3");
+  kprintf("IDT Initialized. \n");
+
   hcf();
 }
 

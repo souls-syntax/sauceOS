@@ -13,7 +13,7 @@ extern "C" {
 
 void kputc(char c);
 
-void kprintf(const char *str);
+void kprintf(const char *fmt, ...);
 
 #ifdef __cplusplus
 }
