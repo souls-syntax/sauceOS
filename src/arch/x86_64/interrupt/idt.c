@@ -26,7 +26,6 @@ struct idt_entry_ptr idt_ptr;
 
 static bool vectors[IDT_MAX_DESCRIPTORS];
 
-extern void idt_flush(uint64_t);
 extern void* isr_stub_table[];
 
 void initIdt() {

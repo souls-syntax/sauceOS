@@ -20,11 +20,3 @@ void outl(uint16_t port, uint32_t value);
 ```
 
 
-NOTE:
-Kernel-mode interrupts do not have a real SS/RSP frame.
-We synthesize one here to unify the C handler ABI.
-This is intentional and must be revisited if:
-- user/kernel GS is used
-- stack walking is added
-- SMP is enabled
-
