@@ -27,6 +27,8 @@ typedef struct {
 
 void exception_handler(registers_t* regs);
 
+void irq_handler(registers_t* regs);
+
 #ifdef __cplusplus
 }
 #endif

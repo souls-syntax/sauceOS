@@ -120,12 +120,30 @@ isr_no_err_stub 29
 isr_err_stub    30 ; Security Exception (HAS ERROR CODE)
 isr_no_err_stub 31
 
+; Outside interrupts
+isr_no_err_stub 32 ; IRQ0 - Programmable Interval Timer (PIT)
+isr_no_err_stub 33 ; IRQ1 - Keyboard <--- TARGET
+isr_no_err_stub 34 ; IRQ2 - Cascade
+isr_no_err_stub 35 ; IRQ3 - COM2
+isr_no_err_stub 36 ; IRQ4 - COM1
+isr_no_err_stub 37 ; IRQ5 - LPT2
+isr_no_err_stub 38 ; IRQ6 - Floppy Disk
+isr_no_err_stub 39 ; IRQ7 - LPT1
+isr_no_err_stub 40 ; IRQ8 - CMOS Real Time Clock
+isr_no_err_stub 41 ; IRQ9 - Legacy / Peripherals
+isr_no_err_stub 42 ; IRQ10
+isr_no_err_stub 43 ; IRQ11
+isr_no_err_stub 44 ; IRQ12 - PS/2 Mouse
+isr_no_err_stub 45 ; IRQ13 - FPU / Coprocessor
+isr_no_err_stub 46 ; IRQ14 - Primary ATA
+isr_no_err_stub 47 ; IRQ15 - Secondary ATA
+
 
 
 global isr_stub_table
 isr_stub_table:
 %assign i 0
-%rep 32
+%rep 48
   dq isr_stub_%+i ; 'dq' is critical for 64-bit pointers
 %assign i i+1
 %endrep

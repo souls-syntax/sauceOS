@@ -52,11 +52,11 @@ void initIdt() {
   outPortB(0x21, 0x01);
   outPortB(0xA1, 0x01);
 
-  outPortB(0x21, 0xFF); // Remember we are still masking over the interrupt over 31+ so set it back to 0 and unmake it when irq handlers are ready.
+  outPortB(0x21, 0xFD); // Remember we are still masking over the interrupt over 31+ so set it back to 0 and unmake it when irq handlers are ready.
   outPortB(0xA1, 0xFF);
 
 
-  for (uint8_t vector = 0; vector < 32; vector++) {
+  for (uint8_t vector = 0; vector < 48; vector++) {
     setIdtGate(vector, isr_stub_table[vector], 0x8E);
     vectors[vector] = true;
   }

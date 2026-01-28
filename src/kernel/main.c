@@ -7,6 +7,7 @@
 #include <video.h>
 #include <gdt.h>
 #include <idt.h>
+#include <keyboard.h>
 
 static void hcf(void) {
   for(;;) {
@@ -19,9 +20,9 @@ void kmain(void) {
   video_init();
   initGdt();
   initIdt();
+  initKeyboard();
 
-  __asm__ volatile ("int $0x3");
-  kprintf("IDT Initialized. \n");
+  kprintf("KIter Initialized. \n");
 
   hcf();
 }
