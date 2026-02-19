@@ -2,27 +2,11 @@
 #include "bootinfo.h"
 #include <stdio.h>
 #include <string.h>
-
+#include "bootinfo.h"
 
 extern struct limine_memmap_response* memmap_info;
-// static struct limine_memmap_entry* memmap;
-
-// // Constants for `type`
-// #define LIMINE_MEMMAP_USABLE                 0
-// #define LIMINE_MEMMAP_RESERVED               1
-// #define LIMINE_MEMMAP_ACPI_RECLAIMABLE       2
-// #define LIMINE_MEMMAP_ACPI_NVS               3
-// #define LIMINE_MEMMAP_BAD_MEMORY             4
-// #define LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE 5
-// #define LIMINE_MEMMAP_EXECUTABLE_AND_MODULES 6
-// #define LIMINE_MEMMAP_FRAMEBUFFER            7
-// #define LIMINE_MEMMAP_ACPI_TABLES            8
-//
-// struct limine_memmap_entry {
-//     uint64_t base;
-//     uint64_t length;
-//     uint64_t type;
-// };
+static struct limine_memmap_entry* memmap;
+extern volatile struct limine_hhdm_request hhdm_request;
 
 static const char* GetMemoryMapType(uint64_t type) {
     switch (type) {
@@ -61,9 +45,63 @@ void PrintMemoryMaps() {
     }
 }
 
+void SetMemoryMap(uint8_t section) {
+    memmap = memmap_info->entries[section];
+    if (hhdm_request.response != NULL) {
+        uint64_t virtual_base = memmap->base + hhdm_request.response->offset;
+        memset((void*)virtual_base,0,memmap->length);
+        kprintf("Ready for allocation!\n");
+    }
+}
 
+void* GetMemoryMapbase() {
+    return (void*) memmap->base;
+}
 
+uint64_t GetMemoryMapLength() {
+    return memmap->length;
+}
 
+static void* BMalloc(uint64_t* base, size_t length, size_t size) {
+    if (length <=LOWEST_BLOCK_SIZE) {
+        if (size + 1 <= length && *((uint64_t*) base) == 0) {
+            *base = size;
+            memset(base+1, 0, sizeof(void*) * size);
+        } else {
+            return NULL;
+        }
+    }
 
+    size_t half = length >> 1;
+    if (size + 1 <= half && *((uint64_t*) base) == 0) {
+        *base = size;
+        memset(base+1, 0, sizeof(void*) * size);
+        return (void*) (base+1);
+    } else if (half > size) {
+        void* buddy = BMalloc(base, half, size);
+        // If allocation was not possible search right
+        if (buddy == NULL) {
+            buddy = BMalloc(base + half, half, size);
+        }
+        return buddy;
+    }
 
+    return NULL;
+}
 
+void* KMalloc(size_t size) {
+    if (hhdm_request.response == NULL) {
+        return NULL;
+    }
+    
+    uint64_t hhdm_offset = hhdm_request.response->offset;
+    uint64_t virtual_base = memmap->base + hhdm_offset;
+    
+
+    return BMalloc((uint64_t*)virtual_base, memmap->length, size);
+}
+
+void KFree(void* base) {
+    uint64_t size = *(((uint64_t*) base) - 1);
+    memset(base, 0, size);
+}

@@ -6,10 +6,11 @@
 
 #include <sys/cdefs.h>
 #include <stdint.h>
+#include <stddef.h>
 #include <limine.h>
 
 #define EOF (-1)
-#define BLOCK_SIZE 4096
+#define LOWEST_BLOCK_SIZE 4096
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,6 +18,13 @@ extern "C" {
 
 
 void PrintMemoryMaps();
+
+void SetMemoryMap(uint8_t section);
+
+void* GetMemoryMapbase();
+
+void* KMalloc(size_t size);
+uint64_t GetMemoryMapLength();
 
 #ifdef __cplusplus
 }

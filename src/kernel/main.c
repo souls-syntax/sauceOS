@@ -10,6 +10,7 @@
 #include <keyboard.h>
 #include <bootinfo.h>
 #include <pmm.h>
+#include <test.h>
 
 static void hcf(void) {
   for(;;) {
@@ -25,9 +26,11 @@ void kmain(void) {
     initIdt();
     initKeyboard();
     PrintMemoryMaps();
-
+    SetMemoryMap(6);
     kprintf("MemoryMapMapping Initialized. \n");
-
+    Test_BasicAllocation();
+    
     hcf();
+
 }
 
