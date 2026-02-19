@@ -8,6 +8,8 @@
 #include <gdt.h>
 #include <idt.h>
 #include <keyboard.h>
+#include <bootinfo.h>
+#include <pmm.h>
 
 static void hcf(void) {
   for(;;) {
@@ -17,13 +19,15 @@ static void hcf(void) {
 
 void kmain(void) {
 
-  video_init();
-  initGdt();
-  initIdt();
-  initKeyboard();
+    bootinfoInit();
+    video_init();
+    initGdt();
+    initIdt();
+    initKeyboard();
+    PrintMemoryMaps();
 
-  kprintf("KIter Initialized. \n");
+    kprintf("MemoryMapMapping Initialized. \n");
 
-  hcf();
+    hcf();
 }
 

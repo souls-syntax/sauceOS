@@ -3,6 +3,7 @@
 #include <limine.h>
 #include <stdint.h>
 #include <string.h>
+#include "bootinfo.h"
 
 void framebuffer_scroll(void) {
   uint8_t *fb = (uint8_t * )g_framebuffer->address;
