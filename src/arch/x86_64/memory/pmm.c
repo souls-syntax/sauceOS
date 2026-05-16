@@ -1,5 +1,6 @@
 #include "pmm.h"
 #include "bootinfo.h"
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include "bootinfo.h"
@@ -7,6 +8,14 @@
 extern struct limine_memmap_response* memmap_info;
 static struct limine_memmap_entry* memmap;
 extern volatile struct limine_hhdm_request hhdm_request;
+
+// GLOBAL VARIABLE KEEPING TRACK OF MEMORY POINTER SPACE
+
+// immutable
+intptr_t BASE_STATE; 
+
+// mutable
+intptr_t CURRENT_STATE;
 
 static const char* GetMemoryMapType(uint64_t type) {
     switch (type) {
@@ -47,6 +56,8 @@ void PrintMemoryMaps() {
 
 void SetMemoryMap(uint8_t section) {
     memmap = memmap_info->entries[section];
+    BASE_STATE = memmap->base + hhdm_request.response->offset;
+    CURRENT_STATE = memmap->base + hhdm_request.response->offset;
     if (hhdm_request.response != NULL) {
         uint64_t virtual_base = memmap->base + hhdm_request.response->offset;
         memset((void*)virtual_base,0,memmap->length);
@@ -62,6 +73,8 @@ uint64_t GetMemoryMapLength() {
     return memmap->length;
 }
 
+
+// Buddy allocator free work is kinda complex better would need some revision.
 static void* BMalloc(uint64_t* base, size_t length, size_t size) {
     if (length <=LOWEST_BLOCK_SIZE) {
         if (size + 1 <= length && *((uint64_t*) base) == 0) {
@@ -89,19 +102,32 @@ static void* BMalloc(uint64_t* base, size_t length, size_t size) {
     return NULL;
 }
 
+
+static void* BumpAlloc(size_t size) {
+	void* temp_state = (void*)CURRENT_STATE;
+        memset(temp_state, 0, size);
+	CURRENT_STATE +=  size;
+	return temp_state;
+}
+
+static void BumpAllocFree() {
+	CURRENT_STATE = BASE_STATE;
+}
+
 void* KMalloc(size_t size) {
     if (hhdm_request.response == NULL) {
         return NULL;
     }
     
-    uint64_t hhdm_offset = hhdm_request.response->offset;
-    uint64_t virtual_base = memmap->base + hhdm_offset;
+    // uint64_t hhdm_offset = hhdm_request.response->offset;
+    // uint64_t virtual_base = memmap->base + hhdm_offset;
     
 
-    return BMalloc((uint64_t*)virtual_base, memmap->length, size);
+    return BumpAlloc(size);
 }
 
 void KFree(void* base) {
-    uint64_t size = *(((uint64_t*) base) - 1);
-    memset(base, 0, size);
+    // uint64_t size = *(((uint64_t*) base) - 1);
+    // memset(base, 0, size);
+    BumpAllocFree();
 }

@@ -5,15 +5,15 @@
 #include <stdint.h>
 #include <string.h> 
 void Test_BasicAllocation() {
-    kprintf("Initiating Data Expedition: Basic Allocation...\n");
+    kprintf("Basic Allocation...\n");
     
-    char* ptr = (char*)KMalloc(64);
+    char* ptr = (char*)KMalloc(4096);
     if (ptr == NULL) { 
         kprintf("FAIL: Allocation failed to return valid coordinates.\n"); 
         return; 
     }
 
-    memset(ptr, 0xDE, 64);
+    memset(ptr, 0xDE, 4096);
     
     for(int i = 0; i < 64; i++) {
         if ((uint8_t)ptr[i] != 0xDE) {
@@ -22,5 +22,5 @@ void Test_BasicAllocation() {
         }
     }
     
-    kprintf("SUCCESS: Basic Allocation and Write verified. Memory is secure.\n");
+    kprintf("SUCCESS: Basic Allocation and Write verified.\n");
 }
