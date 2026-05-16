@@ -28,6 +28,12 @@ volatile struct limine_hhdm_request hhdm_request = {
     .revision = 0
 };
 
+__attribute__((used, section(".limine_requests")))
+volatile struct limine_paging_mode_request paging_request = {
+    .id = LIMINE_PAGING_MODE_REQUEST_ID,
+    .revision = 0
+};
+
 __attribute__((used, section(".limine_requests_end")))
 volatile uint64_t limine_requests_end_marker[] = LIMINE_REQUESTS_END_MARKER;
 

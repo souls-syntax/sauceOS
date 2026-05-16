@@ -22,6 +22,8 @@ extern volatile struct limine_framebuffer_request framebuffer_request;
 
 extern volatile struct limine_hhdm_request hhdm_request;
 
+extern volatile struct limine_paging_mode_request paging_request;
+
 void bootinfoInit();
 
 #ifdef __cplusplus

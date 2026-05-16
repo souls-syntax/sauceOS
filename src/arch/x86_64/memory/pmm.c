@@ -131,3 +131,9 @@ void KFree(void* base) {
     // memset(base, 0, size);
     BumpAllocFree();
 }
+
+
+void* pmm_alloc_frame() {
+    void* virt =  KMalloc(4096);
+    return (void*)((uintptr_t)virt - hhdm_request.response->offset);
+}

@@ -24,8 +24,12 @@ void SetMemoryMap(uint8_t section);
 void* GetMemoryMapbase();
 
 void* KMalloc(size_t size);
+
+void* pmm_alloc_frame();
+
 uint64_t GetMemoryMapLength();
 
+void* pmm_alloc_frame(); 
 #ifdef __cplusplus
 }
 #endif
