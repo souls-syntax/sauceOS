@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 
 static PageTable* pml4;
 
@@ -34,6 +35,22 @@ PageTable* init_PML4() {
     uint64_t cr3 = (uintptr_t) read_CRT();
     pml4 = (PageTable*) (((cr3 >> 12) << 12) + hhdm_request.response->offset);
     return pml4;
+}
+
+void vmm_init() {
+
+    init_PML4();
+
+    PageTable* new_pml4 = (PageTable*)((uintptr_t)pmm_alloc_frame() 
+            + hhdm_request.response->offset);
+    memset(new_pml4, 0, PAGE_SIZE);
+
+    for (int i = 256; i < 512; i++) {
+        new_pml4->entries[i] = pml4->entries[i];
+    }
+    pml4 = new_pml4;
+    uint64_t phys = (uintptr_t)new_pml4 - hhdm_request.response->offset;
+    __asm__ volatile("mov %0, %%cr3"::"r"(phys):"memory");
 }
 
 void set_page_table_entry(PageEntry* entry, uint64_t flag, uintptr_t physical_address )

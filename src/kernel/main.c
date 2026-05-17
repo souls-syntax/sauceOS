@@ -26,7 +26,7 @@ void kmain(void) {
     initIdt();
     initKeyboard();
     pmm_init();
-    init_PML4();
+    vmm_init();
     man_page((void*)0x0000100000000000, pmm_alloc_frame(), PTE_PRESENT | PTE_WRITABLE);
     uint64_t* test = (uint64_t*)0x0000100000000000;
     *test = 0xDEADBEEF;

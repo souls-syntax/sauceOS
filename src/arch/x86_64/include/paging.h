@@ -39,6 +39,7 @@ typedef struct PageTable {
 
 PageTable* init_PML4();
 
+void vmm_init();
 
 void set_page_table_entry(PageEntry* entry, uint64_t flag, uintptr_t physical_address );
 
