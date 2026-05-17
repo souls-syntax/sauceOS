@@ -2,6 +2,7 @@
 #include "paging.h"
 #include "pmm.h"
 
+#include <stdatomic.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -11,6 +12,7 @@ static PageTable* pml4;
 
 #define PAGE_SIZE 4096
 
+extern struct limine_memmap_response* memmap_info;
 static inline void flushTLB(void *page) {
     __asm__ volatile(
             "invlpg (%0)"
@@ -37,6 +39,26 @@ PageTable* init_PML4() {
     return pml4;
 }
 
+extern char kernel_start[];
+extern char kernel_end[];
+
+uint64_t kernel_phys_base;
+uint8_t index_executable_and_module = 8;
+static inline void temp_exec_and_mod_find(){
+    atomic_bool flag = 0;
+    for(size_t i= 0; i < memmap_info->entry_count; i++) {
+        struct limine_memmap_entry* entry = memmap_info->entries[i];
+        if (entry->type == LIMINE_MEMMAP_EXECUTABLE_AND_MODULES) {
+            index_executable_and_module = i;
+            flag = 1;
+        }
+    }
+    if (!flag) {
+        kprintf("index_executable_and_module Not found");
+    }
+    kernel_phys_base = memmap_info->entries[index_executable_and_module]->base;
+}
+
 void vmm_init() {
 
     init_PML4();
@@ -50,6 +72,17 @@ void vmm_init() {
     }
     pml4 = new_pml4;
     uint64_t phys = (uintptr_t)new_pml4 - hhdm_request.response->offset;
+    
+    // Setting up frames
+    temp_exec_and_mod_find();
+    uintptr_t virt = (uintptr_t)kernel_start;
+    uintptr_t kern_phys = kernel_phys_base;
+    while (virt < (uintptr_t)kernel_end) {
+        map_page((void*)virt, (void*)kern_phys, PTE_PRESENT | PTE_WRITABLE);
+        virt += PAGE_SIZE;
+        kern_phys += PAGE_SIZE;
+    }
+
     __asm__ volatile("mov %0, %%cr3"::"r"(phys):"memory");
 }
 
@@ -99,7 +132,6 @@ void map_page(void* virtual_address, void* physical_address, uint64_t flags)
     if(! page_directory->entries[pd_index].present) allocate_entry(page_directory, pd_index,flags);
     PageTable* page_table = (PageTable*) (uint64_t) ((page_directory->entries[pd_index].physical_address << 12) + hhdm_request.response->offset);
 
-    if(! page_table->entries[pt_index].present) allocate_entry(page_table, pt_index,flags);
     set_page_table_entry(&(page_table->entries[pt_index]), flags, physical_address_int);
     flushTLB(virtual_address);
 }
