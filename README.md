@@ -6,6 +6,7 @@ sauceOS is a lightweight, Unix-like operating system written in C and assembly b
 a personal journey to dive deeper into the world of operating systems. As such, sauceOS is constantly evolving, with new features and 
 improvements being added over time. 
 
+[![My OS ScreenShot](./assets/screenshots/waifu_online.png "waifu online")]
 
 ### Core Systems
 - ✅ Limine Boot Protocol
@@ -13,7 +14,8 @@ improvements being added over time.
 - ✅ Global Descriptor Table (GDT)
 - ✅ Interrupt Handling (IDT / ISR / IRQ)
 - ✅ Task State Segment (TSS)
-- 🚧 Memory Management
+- ✅ Memory Management
+- 🚧 Processes & Multitasking
 - 🚧 Shell
 
 ### Drivers
@@ -23,7 +25,6 @@ improvements being added over time.
 ### Planned Kernel Features
 - ❌ File System
 - ❌ ELF Loader
-- ❌ Processes & Multitasking
 - ❌ Networking
 - ❌ Audio
 - ❌ Vim support
