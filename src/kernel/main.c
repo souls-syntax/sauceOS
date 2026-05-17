@@ -27,7 +27,7 @@ void kmain(void) {
     initKeyboard();
     pmm_init();
     vmm_init();
-    man_page((void*)0x0000100000000000, pmm_alloc_frame(), PTE_PRESENT | PTE_WRITABLE);
+    map_page((void*)0x0000100000000000, pmm_alloc_frame(), PTE_PRESENT | PTE_WRITABLE);
     uint64_t* test = (uint64_t*)0x0000100000000000;
     *test = 0xDEADBEEF;
     kprintf("              Testing Paging\nVlaue: %x\n", *test);

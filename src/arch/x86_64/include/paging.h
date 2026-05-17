@@ -43,6 +43,6 @@ void vmm_init();
 
 void set_page_table_entry(PageEntry* entry, uint64_t flag, uintptr_t physical_address );
 
-void man_page(void* virtual_address, void* physical_address, uint64_t flags);
+void map_page(void* virtual_address, void* physical_address, uint64_t flags);
 
 #endif 

@@ -78,7 +78,7 @@ static void allocate_entry(PageTable* table, size_t index, uint64_t flags)
     set_page_table_entry(&(table->entries[index]), flags, (uintptr_t) physical_address );
 }
 
-void man_page(void* virtual_address, void* physical_address, uint64_t flags)
+void map_page(void* virtual_address, void* physical_address, uint64_t flags)
 {
     // Make sure that both addresses are page-aligned.
     uintptr_t virtual_address_int = (uintptr_t) virtual_address;
