@@ -2,7 +2,7 @@
 #define PAGING_H
 
 #include <stdint.h>
-
+#include <stddef.h>
 typedef struct PageEntry {
     uint64_t present: 1;
     uint64_t read_or_write: 1;
@@ -34,5 +34,14 @@ typedef struct PageTable {
 #define PTE_HUGE_PAGE     (1ULL << 7)
 #define PTE_GLOBAL        (1ULL << 8)
 #define PTE_NO_EXECUTE    (1ULL << 63)
+
+
+
+PageTable* init_PML4();
+
+
+void set_page_table_entry(PageEntry* entry, uint64_t flag, uintptr_t physical_address );
+
+void man_page(void* virtual_address, void* physical_address, uint64_t flags);
 
 #endif 

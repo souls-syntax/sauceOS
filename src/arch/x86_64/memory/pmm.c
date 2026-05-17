@@ -42,6 +42,21 @@ static const char* GetMemoryMapType(uint64_t type) {
     }
 } 
 
+void pmm_init()
+{
+    for(size_t i= 0; i < memmap_info->entry_count; i++) {
+        struct limine_memmap_entry* entry = memmap_info->entries[i];
+        if (entry->type == LIMINE_MEMMAP_USABLE ) {
+            memmap = entry;
+            BASE_STATE = memmap->base + hhdm_request.response->offset;
+            CURRENT_STATE = memmap->base + hhdm_request.response->offset;
+            kprintf("PMM initialized at region %d\n", i);
+            return;
+        }
+    }
+    kprintf("No usable Memory found, lolololol");
+}
+
 void PrintMemoryMaps() {
     for(size_t i= 0; i < memmap_info->entry_count; i++) {
         struct limine_memmap_entry* entry = memmap_info->entries[i];
@@ -135,5 +150,6 @@ void KFree(void* base) {
 
 void* pmm_alloc_frame() {
     void* virt =  KMalloc(4096);
+    memset(virt, 0, 4096);
     return (void*)((uintptr_t)virt - hhdm_request.response->offset);
 }

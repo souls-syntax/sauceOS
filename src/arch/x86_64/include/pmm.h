@@ -27,9 +27,10 @@ void* KMalloc(size_t size);
 
 void* pmm_alloc_frame();
 
+void pmm_init();
+
 uint64_t GetMemoryMapLength();
 
-void* pmm_alloc_frame(); 
 #ifdef __cplusplus
 }
 #endif

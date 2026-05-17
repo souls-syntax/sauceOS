@@ -38,6 +38,7 @@ echo "[*] Installing Limine BIOS stage..."
 
 echo "[*] Running QEMU..."
 qemu-system-x86_64 \
+  -d int -no-reboot -no-shutdown \
   -cdrom image.iso \
   -m 512M \
   -display gtk \
