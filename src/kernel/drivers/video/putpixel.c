@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <limine.h>
 #include <video.h>
-
+#include "bootinfo.h"
 
 static uint32_t color = 0x00FF00; 
 

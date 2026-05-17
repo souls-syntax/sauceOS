@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <limine.h>
 #include <video.h>
+#include "bootinfo.h"
 
 #define FONT8x16_IMPLEMENTATION
 #include "font8x16.h"

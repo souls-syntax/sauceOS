@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
+echo "[*] Downloading the latest Limine binary release for the 10.x branch."
+[ -d limine ] || git clone https://codeberg.org/Limine/Limine.git limine --branch=v10.x-binary --depth=1
+
+echo "[*] Building limine utility."
+make -C limine
+
 echo "[*] Building kernel..."
 make
 
@@ -32,6 +38,7 @@ echo "[*] Installing Limine BIOS stage..."
 
 echo "[*] Running QEMU..."
 qemu-system-x86_64 \
+  -d int -no-reboot -no-shutdown \
   -cdrom image.iso \
   -m 512M \
   -display gtk \

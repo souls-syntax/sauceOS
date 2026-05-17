@@ -1,6 +1,7 @@
-//video.h
-#ifndef _VIDEO_H
-#define _VIDEO_H 1
+//test.h
+
+#ifndef _TEST_H
+#define _TEST_H 1
 
 #include <sys/cdefs.h>
 #include <stdint.h>
@@ -12,11 +13,8 @@
 extern "C" {
 #endif
 
-void PutPixel(int x, int y);
 
-void video_init(void);
-
-void framebuffer_scroll(void);
+void Test_BasicAllocation();
 
 #ifdef __cplusplus
 }
