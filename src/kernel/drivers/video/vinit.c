@@ -5,7 +5,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "bootinfo.h"
-
+#include <stdio.h>
 static void hcf(void) {
     for(;;) { asm ("hlt"); }
 }
@@ -25,6 +25,10 @@ void video_init(void) {
 
   // Fetching the first framebuffer
   g_framebuffer = framebuffer_request.response->framebuffers[0];
-
+    kprintf("FB: %dx%d pitch=%d bpp=%d\n",
+        g_framebuffer->width,
+        g_framebuffer->height,
+        g_framebuffer->pitch,
+        g_framebuffer->bpp);
 }
 

@@ -5,6 +5,7 @@
 #include <sys/cdefs.h>
 #include <stdint.h>
 #include <limine.h>
+#include <stdint.h>
 
 #define EOF (-1)
 
@@ -14,10 +15,13 @@ extern "C" {
 
 void PutPixel(int x, int y);
 
+void PutPixelColor(int x, int y, uint32_t color);
+
 void video_init(void);
 
 void framebuffer_scroll(void);
 
+void wallpaperInit();
 #ifdef __cplusplus
 }
 #endif
