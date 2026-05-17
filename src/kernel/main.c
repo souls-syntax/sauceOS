@@ -25,8 +25,6 @@ void kmain(void) {
     initGdt();
     initIdt();
     initKeyboard();
-    PrintMemoryMaps();
-    // SetMemoryMap(6);
     pmm_init();
     init_PML4();
     man_page((void*)0x0000100000000000, pmm_alloc_frame(), PTE_PRESENT | PTE_WRITABLE);
@@ -34,9 +32,7 @@ void kmain(void) {
     *test = 0xDEADBEEF;
     kprintf("              Testing Paging\nVlaue: %x\n", *test);
     kprintf("MemoryMapMapping Initialized. \n");
-    // Test_BasicAllocation();
-    
+    Test_BasicAllocation();
     hcf();
-
 }
 
