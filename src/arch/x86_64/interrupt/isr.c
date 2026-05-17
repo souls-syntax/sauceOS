@@ -4,9 +4,11 @@
 #include <stdio.h>
 #include <io.h>
 #include <keyboard.h>
+#include <timer.h>
+
 
 const char* exception_messages[] = {
-   "Division By Zero",
+    "Division By Zero",
     "Debug",
     "Non Maskable Interrupt",
     "Breakpoint",
@@ -42,40 +44,43 @@ const char* exception_messages[] = {
 void irq_handler(registers_t* regs);
 
 void exception_handler(registers_t* regs) {
-  __asm__ volatile ("cli");
+    __asm__ volatile ("cli");
 
-  if (regs->int_no < 32) {
-    kprintf("KERNEL PANIC: %s\n", exception_messages[regs->int_no]);
-    
-    kprintf("-----------------------------------------------------------------------------------------\n");
+    if (regs->int_no < 32) {
+        kprintf("KERNEL PANIC: %s\n", exception_messages[regs->int_no]);
 
-    kprintf("RIP: %x   CS: %x   RFLAGS: %x\n", regs->rip, regs->cs, regs->rflags);
-    kprintf("RAX: %x   RBX: %x   RCX: %x\n", regs->rax, regs->rbx, regs->rcx);
-    kprintf("RDX: %x   RSI: %x   RDI: %x\n", regs->rdx, regs->rsi, regs->rdi);
-    kprintf("RBP: %x   RSP: %x\n", regs->rbp, regs->rsp);
-    kprintf("Error Code: %x\n", regs->err_code);
+        kprintf("-----------------------------------------------------------------------------------------\n");
 
-    kprintf("------------------------------------------------------------------------------------------\n");
-    kprintf("System halted\n");
-    for(;;) {
-      __asm__ volatile ("hlt");
+        kprintf("RIP: %x   CS: %x   RFLAGS: %x\n", regs->rip, regs->cs, regs->rflags);
+        kprintf("RAX: %x   RBX: %x   RCX: %x\n", regs->rax, regs->rbx, regs->rcx);
+        kprintf("RDX: %x   RSI: %x   RDI: %x\n", regs->rdx, regs->rsi, regs->rdi);
+        kprintf("RBP: %x   RSP: %x\n", regs->rbp, regs->rsp);
+        kprintf("Error Code: %x\n", regs->err_code);
+
+        kprintf("------------------------------------------------------------------------------------------\n");
+        kprintf("System halted\n");
+        for(;;) {
+            __asm__ volatile ("hlt");
+        }
+    } else {
+        irq_handler(regs);
     }
-  } else {
-    irq_handler(regs);
-  }
 
 }
 
 
 void irq_handler(registers_t* regs) {
-  if (regs->int_no == 33) {
-    keyboardHandler(regs);
-  }
-
-  if (regs->int_no >= 32) {
-    outPortB(0x20, 0x20);        //Send to master
-    if (regs->int_no >= 40) {
-      outPortB(0xA0, 0x20);      // send to slave
+    if (regs->int_no == 32) {
+        timer_handler(regs);
     }
-  }
+    if (regs->int_no == 33) {
+        keyboardHandler(regs);
+    }
+
+    if (regs->int_no >= 32) {
+        outPortB(0x20, 0x20);        //Send to master
+        if (regs->int_no >= 40) {
+            outPortB(0xA0, 0x20);      // send to slave
+        }
+    }
 }

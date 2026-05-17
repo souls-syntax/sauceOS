@@ -12,6 +12,7 @@
 #include <pmm.h>
 #include <test.h>
 #include <paging.h>
+#include <timer.h>
 static void hcf(void) {
   for(;;) {
     asm ("hlt");
@@ -32,6 +33,15 @@ void kmain(void) {
     *test = 0xDEADBEEF;
     kprintf("              Testing Paging\nVlaue: %x\n", *test);
     kprintf("MemoryMapMapping Initialized. \n");
+    pit_init(1000);
+    while(1) {
+        uint64_t t = get_ticks();
+        if (t % 1000 == 0 && t > 0) { 
+            kprintf("Ticks: %d\n", t);
+            while(get_ticks() == t); 
+        }
+        __asm__ volatile("hlt");    
+    }
     Test_BasicAllocation();
     hcf();
 }
