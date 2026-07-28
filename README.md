@@ -1,3 +1,7 @@
+# PROJECT IS BEING PUT ON HIATUS
+
+<hr>
+
 # sauceOS
 
 ## Overview
